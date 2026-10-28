@@ -1,11 +1,13 @@
 <?php
+
 /**
  * Praktikum 5: Implementasi Manajemen Data dan REST API Menggunakan PHP dan MySQL
  * File: config/database.php
  * Konfigurasi koneksi basis data menggunakan PDO (PHP Data Objects).
  */
 
-class Database {
+class Database
+{
     private string $host = '127.0.0.1';
     private string $db_name = 'db_mahasiswa';
     private string $username = 'root';
@@ -19,7 +21,8 @@ class Database {
      * @return PDO
      * @throws PDOException
      */
-    public function getConnection(): PDO {
+    public function getConnection(): PDO
+    {
         if ($this->conn === null) {
             $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->db_name};charset=utf8mb4";
             $options = [
@@ -28,11 +31,20 @@ class Database {
                 PDO::ATTR_EMULATE_PREPARES   => false,
             ];
 
-           // Percobaan 5-1 Langkah 4
-           
+            // Percobaan 5-1 Langkah 4
+            try {
+                $this->conn = new PDO(
+                    $dsn,
+                    $this->username,
+                    $this->password,
+                    $options
+                );
+            } catch (PDOException $e) {
+                throw new PDOException("Koneksi ke basis data gagal: " .
+                    $e->getMessage(), (int)$e->getCode());
+            }
         }
 
         return $this->conn;
     }
 }
-
